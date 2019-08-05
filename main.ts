@@ -7,6 +7,8 @@ enum Axis {
     z = 71
 }
 
+
+
 //% color="#AA11FF"
 namespace IMU {
     /**
@@ -14,9 +16,12 @@ namespace IMU {
      */
     //% block
     export function readGyro(axis: Axis): number {
-        let data = 0
+        let datah = 0
+        let datal = 0
         pins.i2cWriteNumber(104, axis, NumberFormat.Int16BE, true)
-        data = pins.i2cReadBuffer(104, 2)
-        return(data)
+        datah = pins.i2cReadNumber(104, NumberFormat.Int16BE, false)
+        pins.i2cWriteNumber(104, axis + 1, NumberFormat.Int16BE, true)
+        datal = pins.i2cReadNumber(104, NumberFormat.Int16BE, false)
+        return (16 * datah + datal)
     }
 }
