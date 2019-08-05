@@ -3,9 +3,7 @@
     "version": "0.0.0",
     "description": "",
     "dependencies": {
-        "core": "*",
-        "radio": "*",
-        "pxt-9250imu": "workspace:6dfc84ed-f85b-4140-a072-b4e2a68e040b"
+        "core": "*"
     },
     "files": [
         "README.md",
