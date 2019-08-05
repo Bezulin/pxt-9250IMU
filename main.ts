@@ -16,12 +16,8 @@ namespace IMU {
      */
     //% block
     export function readGyro(axis: Axis): number {
-        let datah = 0
-        let datal = 0
         pins.i2cWriteNumber(104, axis, NumberFormat.Int8BE, true)
-        datah = pins.i2cReadNumber(104, NumberFormat.Int8BE, false)
-        pins.i2cWriteNumber(104, axis + 1, NumberFormat.Int8BE, true)
-        datal = pins.i2cReadNumber(104, NumberFormat.Int8BE, false)
-        return (16 * datah + datal)
+        let data = pins.i2cReadBuffer(104, 2, false)
+        return (data.getNumber(NumberFormat.Int16BE,0))
     }
 }
