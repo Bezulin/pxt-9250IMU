@@ -35,13 +35,13 @@ namespace IMU9250 {
     export function Gyro(axis: GyroAxis): number {
         let reading = IMU9250.read(axis)
         if (axis == 67) {
-            return (reading - xcal)
+            return ((reading - xcal)/131)
         }
         if (axis == 69) {
-            return (reading - ycal)
+            return ((reading - ycal)/131)
         }
         if (axis == 71) {
-            return (reading - zcal)
+            return ((reading - zcal)/131)
         }
         else {
             return (0)
