@@ -26,7 +26,7 @@ namespace IMU9250 {
      * reads data from a MPU-9250 IMU
      */
     export function read(register: number): number {
-        pins.i2cWriteNumber(104, register, NumberFormat.Int8BE, true)
+        pins.i2cWriteNumber(104, register, NumberFormat.UInt8BE, true)
         let data = pins.i2cReadBuffer(104, 2, false)
         return (data.getNumber(NumberFormat.Int16BE, 0))
     }
@@ -74,5 +74,14 @@ namespace IMU9250 {
     export function Temperature(): number {
         let reading = IMU9250.read(65)
         return ((reading - 1024) / 321 + 21)
+    }
+    //% block
+    export function EnableMagnetometer(): void {
+        pins.i2cWriteNumber(104, 55, NumberFormat.UInt8BE, true)
+        let state = pins.i2cReadNumber(104, NumberFormat.UInt8BE, false)
+        let stateswitch = state | 2
+        let newstate = control.createBuffer(16)
+        newstate.setNumber(NumberFormat.UInt16BE, 0, (880 + stateswitch))
+        pins.i2cWriteBuffer(104, newstate, false)
     }
 }
