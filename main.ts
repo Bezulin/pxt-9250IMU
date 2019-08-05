@@ -10,14 +10,18 @@ enum Axis {
 
 
 //% color="#AA11FF"
-namespace IMU {
+namespace IMU9250 {
     /**
      * reads data from a MPU-9250 IMU
      */
-    //% block
-    export function readGyro(axis: Axis): number {
+    export function readGyro(axis: number): number {
         pins.i2cWriteNumber(104, axis, NumberFormat.Int8BE, true)
         let data = pins.i2cReadBuffer(104, 2, false)
-        return (data.getNumber(NumberFormat.Int16BE,0))
+        return (data.getNumber(NumberFormat.Int16BE, 0))
+    }
+    //% block
+    export function Gyro(axis: Axis): number {
+        let reading = IMU9250.readGyro(axis)
+        return (reading)
     }
 }
