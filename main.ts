@@ -27,14 +27,21 @@ namespace IMU9250 {
         let data = pins.i2cReadBuffer(104, 2, false)
         return (data.getNumber(NumberFormat.Int16BE, 0))
     }
+
     //% block
     export function Gyro(axis: GyroAxis): number {
         let reading = IMU9250.read(axis)
         return (reading)
     }
+
     //% block
     export function Accelerometer(axis: AccelAxis): number {
         let reading = IMU9250.read(axis)
+        return (reading)
+    }
+    //% block
+    export function Temperature(): number {
+        let reading = IMU9250.read(65)
         return (reading)
     }
 }
