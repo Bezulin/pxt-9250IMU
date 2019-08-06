@@ -37,6 +37,15 @@ namespace IMU9250 {
         let data = pins.i2cReadBuffer(104, 2, false)
         return (data.getNumber(NumberFormat.Int16BE, 0))
     }
+    /**
+     * debugging function for magnetometer
+     */
+    //% block
+    export function readstate(): number {
+        pins.i2cWriteNumber(104, 55, NumberFormat.UInt8BE, true)
+        let data = pins.i2cReadBuffer(104, 1, false)
+        return (data.getNumber(NumberFormat.UInt8BE, 0))
+    }
 
     //% block
     export function Gyro(axis: GyroAxis): number {
