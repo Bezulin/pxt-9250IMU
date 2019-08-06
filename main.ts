@@ -105,6 +105,8 @@ namespace IMU9250 {
     export function readMagnetometer(axis: MagAxis): number {
         pins.i2cWriteNumber(12, axis, NumberFormat.UInt8BE, true)
         let data = pins.i2cReadBuffer(12, 2, false)
+        pins.i2cWriteNumber(12, 9, NumberFormat.UInt8BE, true)
+        pins.i2cReadNumber(12, NumberFormat.UInt8BE, false)
         return (data.getNumber(NumberFormat.Int16LE, 0))
     }
 }
