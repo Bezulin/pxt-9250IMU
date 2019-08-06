@@ -143,12 +143,12 @@ namespace IMU9250 {
     //% block
     //% duration.min=1 duration.max=120 duration.defl=10
     export function CalibrateMagnetometer(duration: number): void {
-        let xmax = 0
-        let xmin = 0
-        let ymax = 0
-        let ymin = 0
-        let zmax = 0
-        let zmin = 0
+        let xmax = IMU9250.MagnetometerRaw(3)
+        let xmin = IMU9250.MagnetometerRaw(3)
+        let ymax = IMU9250.MagnetometerRaw(5)
+        let ymin = IMU9250.MagnetometerRaw(5)
+        let zmax = IMU9250.MagnetometerRaw(7)
+        let zmin = IMU9250.MagnetometerRaw(7)
         let x = 0
         let y = 0
         let z = 0
