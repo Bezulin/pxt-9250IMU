@@ -42,8 +42,8 @@ namespace IMU9250 {
      */
     //% block
     export function readstate(): number {
-        pins.i2cWriteNumber(104, 55, NumberFormat.UInt8BE, true)
-        let data = pins.i2cReadBuffer(104, 1, false)
+        pins.i2cWriteNumber(12, 0, NumberFormat.UInt8BE, true)
+        let data = pins.i2cReadBuffer(12, 1, false)
         return (data.getNumber(NumberFormat.UInt8BE, 0))
     }
 
