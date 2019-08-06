@@ -27,9 +27,15 @@ enum MagAxis {
 //% color="#AA11FF"
 namespace IMU9250 {
     // initialize globals
-    let xcal = 0
+    let xcal = 0    //gyro calibration
     let ycal = 0
     let zcal = 0
+    let xmo = 0     //magnetometer offset
+    let ymo = 0
+    let zmo = 0
+    let xms = 1     //magnetometer scale
+    let yms = 1
+    let zms = 1
     /**
      * reads data from the MPU-9250 IMU
      */
@@ -120,8 +126,7 @@ namespace IMU9250 {
     /**
      * Reads the magnetomoter and returns raw data.
      */
-    //% block
-    export function Magnetometer(axis: MagAxis): number {
+    export function MagnetometerRaw(axis: MagAxis): number {
         pins.i2cWriteNumber(12, axis, NumberFormat.UInt8BE, true)
         let data = pins.i2cReadBuffer(12, 2, false)
         pins.i2cWriteNumber(12, 9, NumberFormat.UInt8BE, true)
@@ -140,10 +145,10 @@ namespace IMU9250 {
         let y = 0
         let z = 0
         let start = input.runningTime()
-        while (input.runningTime() - start <= duration) {
-            x = IMU9250.Magnetometer(3)
-            y = IMU9250.Magnetometer(5)
-            z = IMU9250.Magnetometer(7)
+        while (input.runningTime() - start <= duration * 1000) {
+            x = IMU9250.MagnetometerRaw(3)
+            y = IMU9250.MagnetometerRaw(5)
+            z = IMU9250.MagnetometerRaw(7)
             xmax = Math.max(xmax, x)
             xmin = Math.min(xmin, x)
             ymax = Math.max(ymax, y)
@@ -151,7 +156,12 @@ namespace IMU9250 {
             zmax = Math.max(zmax, z)
             zmin = Math.min(zmin, z)
         }
-
-
+        xmo = (xmax - xmin) / 2
+        ymo = (ymax - ymin) / 2
+        zmo = (zmax - zmin) / 2
+        let avg = (xmo + ymo + zmo) / 3
+        xms = avg / xmo
+        yms = avg / ymo
+        zms = avg / zmo
     }
 }
