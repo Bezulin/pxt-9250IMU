@@ -48,10 +48,8 @@ namespace IMU9250 {
      * debugging function for magnetometer
      */
     //% block
-    export function readmagmode(): number {
-        pins.i2cWriteNumber(12, 10, NumberFormat.UInt8BE, true)
-        let data = pins.i2cReadBuffer(12, 1, false)
-        return (data.getNumber(NumberFormat.UInt8BE, 0))
+    export function magcals(): number {
+        return ((xmo, xms, ymo, yms, zmo, zms))
     }
     /**
      * Reads the gyroscope and returns a value in deg/s.
