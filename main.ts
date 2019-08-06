@@ -180,13 +180,13 @@ namespace IMU9250 {
             zmax = Math.max(zmax, z)
             zmin = Math.min(zmin, z)
         }
-        xmo = (xmax - xmin) / 2
-        ymo = (ymax - ymin) / 2
-        zmo = (zmax - zmin) / 2
-        let avg = (xmo + ymo + zmo) / 3
-        xms = avg / xmo
-        yms = avg / ymo
-        zms = avg / zmo
+        xmo = (xmax + xmin) / 2
+        ymo = (ymax + ymin) / 2
+        zmo = (zmax + zmin) / 2
+        let avg = ((xmax - xmin) + (ymax - ymin) + (zmax - zmin)) / 3
+        xms = avg / (xmax - xmin)
+        yms = avg / (ymax - ymin)
+        zms = avg / (zmax - zmin)
     }
     /**
      * Reads the magnetometer.
