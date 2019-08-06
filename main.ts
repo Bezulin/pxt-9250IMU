@@ -91,6 +91,7 @@ namespace IMU9250 {
         basic.pause(10)
         pins.i2cWriteNumber(12, 2582, NumberFormat.UInt16BE, false)
     }
+
     //% block
     export function readMagnetometer(axis: MagAxis): number {
         pins.i2cWriteNumber(12, axis, NumberFormat.UInt8BE, true)
