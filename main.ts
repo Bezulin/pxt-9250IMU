@@ -128,4 +128,30 @@ namespace IMU9250 {
         pins.i2cReadNumber(12, NumberFormat.UInt8BE, false)
         return (data.getNumber(NumberFormat.Int16LE, 0))
     }
+    //% block
+    export function CalibrateMagnetometer(duration: number): void {
+        let xmax = 0
+        let xmin = 0
+        let ymax = 0
+        let ymin = 0
+        let zmax = 0
+        let zmin = 0
+        let x = 0
+        let y = 0
+        let z = 0
+        let start = input.runningTime()
+        while (input.runningTime() - start <= duration) {
+            x = IMU9250.Magnetometer(3)
+            y = IMU9250.Magnetometer(5)
+            z = IMU9250.Magnetometer(7)
+            xmax = Math.max(xmax, x)
+            xmin = Math.min(xmin, x)
+            ymax = Math.max(ymax, y)
+            ymin = Math.min(ymin, y)
+            zmax = Math.max(zmax, z)
+            zmin = Math.min(zmin, z)
+        }
+
+
+    }
 }
