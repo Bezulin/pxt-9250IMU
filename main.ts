@@ -32,6 +32,16 @@ enum Grange {
     //% block="16G"
     sixteen = 24
 }
+enum Gyrange {
+    //% block="250 deg/s"
+    two = 0,
+    //% block="500 deg/s"
+    four = 8,
+    //% block="1000 deg/s"
+    eight = 16,
+    //% block="2000 deg/s"
+    sixteen = 24
+}
 
 //% color="#AA11FF"
 namespace IMU9250 {
@@ -46,6 +56,7 @@ namespace IMU9250 {
     let yms = 1
     let zms = 1
     let acscl = .061   //accelerometer scale
+    let gyscl = 131     //gyro scale
     /**
      * reads data from the MPU-9250 IMU
      */
@@ -118,10 +129,21 @@ namespace IMU9250 {
         ycal = y / 100
         zcal = z / 100
     }
+    /**
+     * Sets the sensitivity of the accelerometer.
+     */
     //% block
     export function SetAccelerometerSensitivity(sensitivity: Grange): void {
         pins.i2cWriteNumber(104, (7168 + sensitivity), NumberFormat.UInt16BE, false)
         acscl = .061 * 2 ** (sensitivity >> 3)
+    }
+    /**
+    * Sets the sensitivity of the gyro.
+    */
+    //% block
+    export function SetGyroSensitivity(sensitivity: Gyrange): void {
+        pins.i2cWriteNumber(104, (7167 + sensitivity), NumberFormat.UInt16BE, false)
+        gyscl = 131 / (2 ** (sensitivity >> 3))
     }
     /**
      * Reads the accelerometer and returns the value
@@ -130,7 +152,7 @@ namespace IMU9250 {
     //% block
     export function Accelerometer(axis: AccelAxis): number {
         let reading = IMU9250.read(axis)
-        return (reading * acscl)
+        return (Math.round(reading * acscl))
     }
     /**
      * Reads the temperature of the IMU (in degrees C)
