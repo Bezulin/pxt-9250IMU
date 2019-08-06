@@ -88,13 +88,13 @@ namespace IMU9250 {
         let state = pins.i2cReadNumber(104, NumberFormat.UInt8BE, false)
         let stateswitch = state | 2
         let newstate = pins.createBuffer(16)
-        newstate.setNumber(NumberFormat.UInt16BE, 0, (880 + stateswitch))
+        newstate.setNumber(NumberFormat.UInt16BE, 0, (7040 + stateswitch))
         pins.i2cWriteBuffer(104, newstate, false)
     }
     //% block
     export function readMagnetometer(axis: MagAxis): number {
         let magon = pins.createBuffer(16)
-        magon.setNumber(NumberFormat.UInt16BE, 0, 182)
+        magon.setNumber(NumberFormat.UInt16BE, 0, 1302)
         pins.i2cWriteBuffer(12, magon, false)
         basic.pause(1)
         pins.i2cWriteNumber(12, axis, NumberFormat.UInt8BE, true)
