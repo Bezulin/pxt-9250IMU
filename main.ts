@@ -22,7 +22,16 @@ enum MagAxis {
     //% block="z axis"
     z = 7
 }
-
+enum Grange {
+    //% block="2G"
+    two = 0,
+    //% block="4G"
+    four = 8,
+    //% block="8G"
+    eight = 16,
+    //% block="16G"
+    sixteen = 24
+}
 
 //% color="#AA11FF"
 namespace IMU9250 {
@@ -36,6 +45,7 @@ namespace IMU9250 {
     let xms = 1     //magnetometer scale
     let yms = 1
     let zms = 1
+    let acscl = .061   //accelerometer scale
     /**
      * reads data from the MPU-9250 IMU
      */
@@ -108,6 +118,11 @@ namespace IMU9250 {
         ycal = y / 100
         zcal = z / 100
     }
+    //% block
+    export function SetAccelerometerSensitivity(sensitivity: Grange): void {
+        pins.i2cWriteNumber(104, (7168 + sensitivity), NumberFormat.UInt16BE, false)
+        acscl = .061 * 2 ** (sensitivity >> 3)
+    }
     /**
      * Reads the accelerometer and returns the value
      * in microgravities (1/1000th of a gravity)
@@ -115,7 +130,7 @@ namespace IMU9250 {
     //% block
     export function Accelerometer(axis: AccelAxis): number {
         let reading = IMU9250.read(axis)
-        return (reading * .061)
+        return (reading * acscl)
     }
     /**
      * Reads the temperature of the IMU (in degrees C)
