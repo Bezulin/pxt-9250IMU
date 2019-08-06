@@ -14,7 +14,14 @@ enum AccelAxis {
     //% block="z axis"
     z = 63
 }
-
+enum MagAxis {
+    //% block="x axis"
+    x = 3,
+    //% block="y axis"
+    y = 5,
+    //% block="z axis"
+    z = 7
+}
 
 
 //% color="#AA11FF"
@@ -88,10 +95,10 @@ namespace IMU9250 {
     export function readMagnetometer(axis: MagAxis): number {
         let magon = pins.createBuffer(16)
         magon.setNumber(NumberFormat.UInt16BE, 0, 177)
-        pins.i2cWriteBuffer(12, newstate, false)
+        pins.i2cWriteBuffer(12, magon, false)
 
         pins.i2cWriteNumber(12, axis, NumberFormat.UInt8BE, true)
-        let data = pins.i2cReadBuffer(104, 2, false)
+        let data = pins.i2cReadBuffer(12, 2, false)
         return (data.getNumber(NumberFormat.Int16BE, 0))
     }
 
