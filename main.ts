@@ -141,7 +141,7 @@ namespace IMU9250 {
      * process can be set (in seconds).
      */
     //% block
-    //% duration.min = 1 duration.max = 120 duration.defl = 10
+    //% duration.min=1 duration.max=120 duration.defl=10
     export function CalibrateMagnetometer(duration: number): void {
         let xmax = 0
         let xmin = 0
