@@ -133,6 +133,13 @@ namespace IMU9250 {
         pins.i2cReadNumber(12, NumberFormat.UInt8BE, false)
         return (data.getNumber(NumberFormat.Int16LE, 0))
     }
+    /**
+     * To calibrate the magnetometer every axis needs to be
+     * pointed in every possible orientation. While it is running
+     * rotate the IMU around as much as possible. More data will
+     * yield better results, the duration of the data calibration
+     * process can be set (in seconds).
+     */
     //% block
     export function CalibrateMagnetometer(duration: number): void {
         let xmax = 0
@@ -164,6 +171,10 @@ namespace IMU9250 {
         yms = avg / ymo
         zms = avg / zmo
     }
+    /**
+     * Reads the magnetometer.
+     */
+    //% block
     export function magnetometer(axis: MagAxis): number {
         let reading = IMU9250.MagnetometerRaw(axis)
         if (axis == 3) {
@@ -175,5 +186,6 @@ namespace IMU9250 {
         if (axis == 7) {
             return ((reading - zmo) * zms)
         }
+        else { return (0) }
     }
 }
