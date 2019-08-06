@@ -94,7 +94,7 @@ namespace IMU9250 {
     //% block
     export function readMagnetometer(axis: MagAxis): number {
         let magon = pins.createBuffer(16)
-        magon.setNumber(NumberFormat.UInt16BE, 0, 177)
+        magon.setNumber(NumberFormat.UInt16BE, 0, 182)
         pins.i2cWriteBuffer(12, magon, false)
         basic.pause(1)
         pins.i2cWriteNumber(12, axis, NumberFormat.UInt8BE, true)
