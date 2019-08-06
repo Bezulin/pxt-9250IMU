@@ -76,13 +76,13 @@ namespace IMU9250 {
     export function Gyro(axis: GyroAxis): number {
         let reading = IMU9250.read(axis)
         if (axis == 67) {
-            return ((reading - xcal) / 131)
+            return (Math.round((reading - xcal) / 131))
         }
         if (axis == 69) {
-            return ((reading - ycal) / 131)
+            return (Math.round((reading - ycal) / 131))
         }
         if (axis == 71) {
-            return ((reading - zcal) / 131)
+            return (Math.round((reading - zcal) / 131))
         }
         else {
             return (0)
@@ -195,13 +195,13 @@ namespace IMU9250 {
     export function magnetometer(axis: MagAxis): number {
         let reading = IMU9250.MagnetometerRaw(axis)
         if (axis == 3) {
-            return ((reading - xmo) * xms)
+            return (Math.round((reading - xmo) * xms))
         }
         if (axis == 5) {
-            return ((reading - ymo) * yms)
+            return (Math.round((reading - ymo) * yms))
         }
         if (axis == 7) {
-            return ((reading - zmo) * zms)
+            return (Math.round((reading - zmo) * zms))
         }
         else { return (0) }
     }
