@@ -96,7 +96,7 @@ namespace IMU9250 {
         let magon = pins.createBuffer(16)
         magon.setNumber(NumberFormat.UInt16BE, 0, 177)
         pins.i2cWriteBuffer(12, magon, false)
-
+        basic.pause(.1)
         pins.i2cWriteNumber(12, axis, NumberFormat.UInt8BE, true)
         let data = pins.i2cReadBuffer(12, 2, false)
         return (data.getNumber(NumberFormat.Int16BE, 0))
