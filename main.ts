@@ -49,7 +49,7 @@ namespace IMU9250 {
      */
     //% block
     export function magcals(): number {
-        return ((xmo, xms, ymo, yms, zmo, zms))
+        return (xmo, xms, ymo, yms, zmo, zms)
     }
     /**
      * Reads the gyroscope and returns a value in deg/s.
