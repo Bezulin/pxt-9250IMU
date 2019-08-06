@@ -164,4 +164,16 @@ namespace IMU9250 {
         yms = avg / ymo
         zms = avg / zmo
     }
+    export function magnetometer(axis: MagAxis): number {
+        let reading = IMU9250.MagnetometerRaw(axis)
+        if (axis == 3) {
+            return ((reading - xmo) * xms)
+        }
+        if (axis == 5) {
+            return ((reading - ymo) * yms)
+        }
+        if (axis == 7) {
+            return ((reading - zmo) * zms)
+        }
+    }
 }
