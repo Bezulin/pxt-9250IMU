@@ -135,7 +135,7 @@ namespace IMU9250 {
     //% block
     export function Temperature(): number {
         let reading = IMU9250.read(65)
-        return ((reading - 1023) / 321 + 21)
+        return (reading / 321 + 16)
     }
     /**
      * This block enables communication with the magnetomoeter 
