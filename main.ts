@@ -220,6 +220,7 @@ namespace IMU9250 {
         zms = avg / (zmax - zmin)
     }
     /**
+
      * Returns the x, y, or z calibration values for the gyro.
      */
     //% color="#FF4422"
@@ -261,6 +262,7 @@ namespace IMU9250 {
         }
         if (axis == 7) {
             return (zmo)
+
         }
         else { return (0) }
     }
@@ -292,6 +294,7 @@ namespace IMU9250 {
         else { return (0) }
     }
     /**
+
      * Manual input of magnetometer soft iron offset values.
      */
     //% color="#FF4422"
