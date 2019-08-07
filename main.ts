@@ -66,31 +66,6 @@ namespace IMU9250 {
         return (data.getNumber(NumberFormat.Int16BE, 0))
     }
     /**
-     * debugging function for magnetometer
-     */
-    //% block
-    export function magcals(num: number): number {
-        if (num == 0) {
-            return (xmo)
-        }
-        if (num == 1) {
-            return (xms)
-        }
-        if (num == 2) {
-            return (ymo)
-        }
-        if (num == 3) {
-            return (yms)
-        }
-        if (num == 4) {
-            return (zmo)
-        }
-        if (num == 5) {
-            return (zms)
-        }
-        else { return (0) }
-    }
-    /**
      * Reads the gyroscope and returns a value in deg/s.
      */
     //% block
