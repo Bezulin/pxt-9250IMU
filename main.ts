@@ -44,7 +44,7 @@ enum Gyrange {
 }
 
 //% color="#2244FF"
-//% groups=['readings','setup','advanced']
+//% groups=['readings','setup','others','advanced']
 namespace IMU9250 {
     // initialize globals
     let xcal = 0    //gyro calibration
