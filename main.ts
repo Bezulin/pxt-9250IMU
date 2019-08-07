@@ -44,6 +44,7 @@ enum Gyrange {
 }
 
 //% color="#2244FF"
+//% groups="['advanced','sensor readings']"
 namespace IMU9250 {
     // initialize globals
     let xcal = 0    //gyro calibration
@@ -69,6 +70,7 @@ namespace IMU9250 {
      * Reads the gyroscope and returns a value in deg/s.
      */
     //% block
+    //% group="sensor readings"
     export function Gyro(axis: GyroAxis): number {
         let reading = IMU9250.read(axis)
         if (axis == 67) {
@@ -218,10 +220,12 @@ namespace IMU9250 {
         zms = avg / (zmax - zmin)
     }
     /**
-     * Returns the x, y, and z calibration values for the gyro.
+
+     * Returns the x, y, or z calibration values for the gyro.
      */
     //% color="#FF4422"
     //% block
+    //% group="advanced"
     export function gyroCalibrationValue(axis: GyroAxis): number {
         if (axis == 67) {
             return (xcal)
@@ -258,6 +262,7 @@ namespace IMU9250 {
         }
         if (axis == 7) {
             return (zmo)
+
         }
         else { return (0) }
     }
@@ -272,7 +277,7 @@ namespace IMU9250 {
         zmo = z
     }
     /**
-    * Returns the x, y, and z hard iron offset values for the magnetometer.
+    * Returns the x, y, and z soft iron offset values for the magnetometer.
     */
     //% color="#FF4422"
     //% block
@@ -289,6 +294,7 @@ namespace IMU9250 {
         else { return (0) }
     }
     /**
+
      * Manual input of magnetometer soft iron offset values.
      */
     //% color="#FF4422"
