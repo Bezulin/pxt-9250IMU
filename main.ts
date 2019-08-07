@@ -104,6 +104,11 @@ namespace IMU9250 {
         ycal = y / 100
         zcal = z / 100
     }
+    //% block
+    export function gyroCalibrationValues(): number[] {
+        let list = [xcal, ycal, zcal]
+        return (list)
+    }
     /**
      * Sets the sensitivity of the accelerometer.
      */
@@ -135,7 +140,7 @@ namespace IMU9250 {
     //% block
     export function Temperature(): number {
         let reading = IMU9250.read(65)
-        return (reading / 321 + 16)
+        return (reading / 321 + 19)
     }
     /**
      * This block enables communication with the magnetomoeter 
