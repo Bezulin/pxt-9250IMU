@@ -44,6 +44,7 @@ enum Gyrange {
 }
 
 //% color="#2244FF"
+//% groups="['readings','setup','advanced']"
 namespace IMU9250 {
     // initialize globals
     let xcal = 0    //gyro calibration
@@ -69,6 +70,7 @@ namespace IMU9250 {
      * Reads the gyroscope and returns a value in deg/s.
      */
     //% block
+    //% group="readings"
     export function Gyro(axis: GyroAxis): number {
         let reading = IMU9250.read(axis)
         if (axis == 67) {
@@ -90,6 +92,7 @@ namespace IMU9250 {
      * in microgravities (1/1000th of a gravity)
      */
     //% block
+    //% group="readings"
     export function Accelerometer(axis: AccelAxis): number {
         let reading = IMU9250.read(axis)
         return (Math.round(reading * acscl))
@@ -98,6 +101,7 @@ namespace IMU9250 {
     * Reads the magnetometer.
     */
     //% block
+    //% group="readings"
     export function magnetometer(axis: MagAxis): number {
         let reading = IMU9250.MagnetometerRaw(axis)
         if (axis == 3) {
@@ -115,6 +119,7 @@ namespace IMU9250 {
     * Reads the temperature of the IMU (in degrees C)
     */
     //% block
+    //% group="readings"
     export function Temperature(): number {
         let reading = IMU9250.read(65)
         return (reading / 321 + 19)
@@ -123,6 +128,7 @@ namespace IMU9250 {
     * Sets the sensitivity of the accelerometer.
     */
     //% block
+    //% group="setup"
     export function SetAccelerometerSensitivity(sensitivity: Grange): void {
         pins.i2cWriteNumber(104, (7168 + sensitivity), NumberFormat.UInt16BE, false)
         acscl = .061 * 2 ** (sensitivity >> 3)
@@ -131,6 +137,7 @@ namespace IMU9250 {
     * Sets the sensitivity of the gyro.
     */
     //% block
+    //% group="setup"
     export function SetGyroSensitivity(sensitivity: Gyrange): void {
         pins.i2cWriteNumber(104, (7167 + sensitivity), NumberFormat.UInt16BE, false)
         gyscl = 131 / (2 ** (sensitivity >> 3))
@@ -141,6 +148,7 @@ namespace IMU9250 {
      * the calibration process.
      */
     //% block
+    //% group="setup"
     export function CallibrateGyro(): void {
         let x = 0
         let y = 0
@@ -160,6 +168,7 @@ namespace IMU9250 {
     * run this block at least once before using the magnetometer.
     */
     //% block
+    //% group="setup"
     export function EnableMagnetometer(): void {
         pins.i2cWriteNumber(104, 55, NumberFormat.UInt8BE, true)
         let state = pins.i2cReadNumber(104, NumberFormat.UInt8BE, false)
@@ -186,6 +195,7 @@ namespace IMU9250 {
      * process can be set (in seconds).
      */
     //% block
+    //% group="setup"
     //% duration.min=1 duration.max=120 duration.defl=10
     export function CalibrateMagnetometer(duration: number): void {
         let xmax = IMU9250.MagnetometerRaw(3)
@@ -222,6 +232,7 @@ namespace IMU9250 {
      */
     //% color="#FF4422"
     //% block
+    //% group="advanced"
     export function gyroCalibrationValue(axis: GyroAxis): number {
         if (axis == 67) {
             return (xcal)
@@ -239,6 +250,7 @@ namespace IMU9250 {
      */
     //% color="#FF4422"
     //% block
+    //% group="advanced"
     export function gyroCalibrationManualInput(x: number, y: number, z: number): void {
         xcal = x
         ycal = y
@@ -249,6 +261,7 @@ namespace IMU9250 {
     */
     //% color="#FF4422"
     //% block
+    //% group="advanced"
     export function magnitometerHardIronValue(axis: MagAxis): number {
         if (axis == 3) {
             return (xmo)
@@ -266,6 +279,7 @@ namespace IMU9250 {
      */
     //% color="#FF4422"
     //% block
+    //% group="advanced"
     export function magnitometerHardIronManualInput(x: number, y: number, z: number): void {
         xmo = x
         ymo = y
@@ -276,6 +290,7 @@ namespace IMU9250 {
     */
     //% color="#FF4422"
     //% block
+    //% group="advanced"
     export function magnitometerSoftIronValue(axis: MagAxis): number {
         if (axis == 3) {
             return (xms)
@@ -293,16 +308,10 @@ namespace IMU9250 {
      */
     //% color="#FF4422"
     //% block
+    //% group="advanced"
     export function magnitometerSoftIronManualInput(x: number, y: number, z: number): void {
         xms = x
         yms = y
         zms = z
     }
-
-
-
-
-
-
-
 }
