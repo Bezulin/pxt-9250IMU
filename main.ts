@@ -43,7 +43,7 @@ enum Gyrange {
     twth = 24
 }
 
-//% color="#AA11FF"
+//% color="#2244FF"
 namespace IMU9250 {
     // initialize globals
     let xcal = 0    //gyro calibration
@@ -104,11 +104,89 @@ namespace IMU9250 {
         ycal = y / 100
         zcal = z / 100
     }
+    /**
+     * Returns the x, y, and z calibration values for the gyro.
+     */
+    //% color="#FF4422"
     //% block
-    export function gyroCalibrationValues(): number[] {
-        let list = [xcal, ycal, zcal]
-        return (list)
+    export function gyroCalibrationValue(axis: GyroAxis): number {
+        if (axis == 67) {
+            return (xcal)
+        }
+        if (axis == 69) {
+            return (ycal)
+        }
+        if (axis == 70) {
+            return (zcal)
+        }
+        else { return (0) }
     }
+    /**
+     * Manual input of calibration values.
+     */
+    //% color="#FF4422"
+    //% block
+    export function gyroCalibrationManualInput(x: number, y: number, z: number): void {
+        xcal = x
+        ycal = y
+        zcal = z
+    }
+    /**
+    * Returns the x, y, and z hard iron offset values for the magnetometer.
+    */
+    //% color="#FF4422"
+    //% block
+    export function magnitometerHardIronValue(axis: MagAxis): number {
+        if (axis == 3) {
+            return (xmo)
+        }
+        if (axis == 5) {
+            return (ymo)
+        }
+        if (axis == 7) {
+            return (zmo)
+        }
+        else { return (0) }
+    }
+    /**
+     * Manual input of magnetometer hard iron offset values.
+     */
+    //% color="#FF4422"
+    //% block
+    export function magnitometerHardIronManualInput(x: number, y: number, z: number): void {
+        xmo = x
+        ymo = y
+        zmo = z
+    }
+    /**
+    * Returns the x, y, and z hard iron offset values for the magnetometer.
+    */
+    //% color="#FF4422"
+    //% block
+    export function magnitometerSoftIronValue(axis: MagAxis): number {
+        if (axis == 3) {
+            return (xms)
+        }
+        if (axis == 5) {
+            return (yms)
+        }
+        if (axis == 7) {
+            return (zms)
+        }
+        else { return (0) }
+    }
+    /**
+     * Manual input of magnetometer soft iron offset values.
+     */
+    //% color="#FF4422"
+    //% block
+    export function magnitometerSoftIronManualInput(x: number, y: number, z: number): void {
+        xms = x
+        yms = y
+        zms = z
+    }
+
+
     /**
      * Sets the sensitivity of the accelerometer.
      */
