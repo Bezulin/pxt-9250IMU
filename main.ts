@@ -34,13 +34,13 @@ enum Grange {
 }
 enum Gyrange {
     //% block="250 deg/s"
-    two = 0,
+    tfty = 0,
     //% block="500 deg/s"
-    four = 8,
+    fvhd = 8,
     //% block="1000 deg/s"
-    eight = 16,
+    onth = 16,
     //% block="2000 deg/s"
-    sixteen = 24
+    twth = 24
 }
 
 //% color="#AA11FF"
