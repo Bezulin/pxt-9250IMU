@@ -86,6 +86,56 @@ namespace IMU9250 {
 
     }
     /**
+     * Reads the accelerometer and returns the value
+     * in microgravities (1/1000th of a gravity)
+     */
+    //% block
+    export function Accelerometer(axis: AccelAxis): number {
+        let reading = IMU9250.read(axis)
+        return (Math.round(reading * acscl))
+    }
+    /**
+    * Reads the magnetometer.
+    */
+    //% block
+    export function magnetometer(axis: MagAxis): number {
+        let reading = IMU9250.MagnetometerRaw(axis)
+        if (axis == 3) {
+            return (Math.round((reading - xmo) * xms))
+        }
+        if (axis == 5) {
+            return (Math.round((reading - ymo) * yms))
+        }
+        if (axis == 7) {
+            return (Math.round((reading - zmo) * zms))
+        }
+        else { return (0) }
+    }
+    /**
+    * Reads the temperature of the IMU (in degrees C)
+    */
+    //% block
+    export function Temperature(): number {
+        let reading = IMU9250.read(65)
+        return (reading / 321 + 19)
+    }
+    /**
+    * Sets the sensitivity of the accelerometer.
+    */
+    //% block
+    export function SetAccelerometerSensitivity(sensitivity: Grange): void {
+        pins.i2cWriteNumber(104, (7168 + sensitivity), NumberFormat.UInt16BE, false)
+        acscl = .061 * 2 ** (sensitivity >> 3)
+    }
+    /**
+    * Sets the sensitivity of the gyro.
+    */
+    //% block
+    export function SetGyroSensitivity(sensitivity: Gyrange): void {
+        pins.i2cWriteNumber(104, (7167 + sensitivity), NumberFormat.UInt16BE, false)
+        gyscl = 131 / (2 ** (sensitivity >> 3))
+    }
+    /**
      * Calibrates the gyroscope for accurate readings.
      * The IMU must remain perfectly motionless during
      * the calibration process.
@@ -103,6 +153,69 @@ namespace IMU9250 {
         xcal = x / 100
         ycal = y / 100
         zcal = z / 100
+    }
+    /**
+    * This block enables communication with the magnetomoeter 
+    * and puts it in continuous read mode. It is necessary to 
+    * run this block at least once before using the magnetometer.
+    */
+    //% block
+    export function EnableMagnetometer(): void {
+        pins.i2cWriteNumber(104, 55, NumberFormat.UInt8BE, true)
+        let state = pins.i2cReadNumber(104, NumberFormat.UInt8BE, false)
+        let stateswitch = state | 2
+        pins.i2cWriteNumber(104, (14080 + stateswitch), NumberFormat.UInt16BE, false)
+        basic.pause(10)
+        pins.i2cWriteNumber(12, 2582, NumberFormat.UInt16BE, false)
+    }
+    /**
+     * Reads the magnetomoter and returns raw data.
+     */
+    export function MagnetometerRaw(axis: MagAxis): number {
+        pins.i2cWriteNumber(12, axis, NumberFormat.UInt8BE, true)
+        let data = pins.i2cReadBuffer(12, 2, false)
+        pins.i2cWriteNumber(12, 9, NumberFormat.UInt8BE, true)
+        pins.i2cReadNumber(12, NumberFormat.UInt8BE, false)
+        return (data.getNumber(NumberFormat.Int16LE, 0))
+    }
+    /**
+     * To calibrate the magnetometer every axis needs to be
+     * pointed in every possible orientation. While it is running
+     * rotate the IMU around as much as possible. More data will
+     * yield better results, the duration of the data calibration
+     * process can be set (in seconds).
+     */
+    //% block
+    //% duration.min=1 duration.max=120 duration.defl=10
+    export function CalibrateMagnetometer(duration: number): void {
+        let xmax = IMU9250.MagnetometerRaw(3)
+        let xmin = IMU9250.MagnetometerRaw(3)
+        let ymax = IMU9250.MagnetometerRaw(5)
+        let ymin = IMU9250.MagnetometerRaw(5)
+        let zmax = IMU9250.MagnetometerRaw(7)
+        let zmin = IMU9250.MagnetometerRaw(7)
+        let x = 0
+        let y = 0
+        let z = 0
+        let start = input.runningTime()
+        while (input.runningTime() - start <= duration * 1000) {
+            x = IMU9250.MagnetometerRaw(3)
+            y = IMU9250.MagnetometerRaw(5)
+            z = IMU9250.MagnetometerRaw(7)
+            xmax = Math.max(xmax, x)
+            xmin = Math.min(xmin, x)
+            ymax = Math.max(ymax, y)
+            ymin = Math.min(ymin, y)
+            zmax = Math.max(zmax, z)
+            zmin = Math.min(zmin, z)
+        }
+        xmo = (xmax + xmin) / 2
+        ymo = (ymax + ymin) / 2
+        zmo = (zmax + zmin) / 2
+        let avg = ((xmax - xmin) + (ymax - ymin) + (zmax - zmin)) / 3
+        xms = avg / (xmax - xmin)
+        yms = avg / (ymax - ymin)
+        zms = avg / (zmax - zmin)
     }
     /**
      * Returns the x, y, and z calibration values for the gyro.
@@ -187,117 +300,9 @@ namespace IMU9250 {
     }
 
 
-    /**
-     * Sets the sensitivity of the accelerometer.
-     */
-    //% block
-    export function SetAccelerometerSensitivity(sensitivity: Grange): void {
-        pins.i2cWriteNumber(104, (7168 + sensitivity), NumberFormat.UInt16BE, false)
-        acscl = .061 * 2 ** (sensitivity >> 3)
-    }
-    /**
-    * Sets the sensitivity of the gyro.
-    */
-    //% block
-    export function SetGyroSensitivity(sensitivity: Gyrange): void {
-        pins.i2cWriteNumber(104, (7167 + sensitivity), NumberFormat.UInt16BE, false)
-        gyscl = 131 / (2 ** (sensitivity >> 3))
-    }
-    /**
-     * Reads the accelerometer and returns the value
-     * in microgravities (1/1000th of a gravity)
-     */
-    //% block
-    export function Accelerometer(axis: AccelAxis): number {
-        let reading = IMU9250.read(axis)
-        return (Math.round(reading * acscl))
-    }
-    /**
-     * Reads the temperature of the IMU (in degrees C)
-     */
-    //% block
-    export function Temperature(): number {
-        let reading = IMU9250.read(65)
-        return (reading / 321 + 19)
-    }
-    /**
-     * This block enables communication with the magnetomoeter 
-     * and puts it in continuous read mode. It is necessary to 
-     * run this block at least once before using the magnetometer.
-     */
-    //% block
-    export function EnableMagnetometer(): void {
-        pins.i2cWriteNumber(104, 55, NumberFormat.UInt8BE, true)
-        let state = pins.i2cReadNumber(104, NumberFormat.UInt8BE, false)
-        let stateswitch = state | 2
-        pins.i2cWriteNumber(104, (14080 + stateswitch), NumberFormat.UInt16BE, false)
-        basic.pause(10)
-        pins.i2cWriteNumber(12, 2582, NumberFormat.UInt16BE, false)
-    }
-    /**
-     * Reads the magnetomoter and returns raw data.
-     */
-    export function MagnetometerRaw(axis: MagAxis): number {
-        pins.i2cWriteNumber(12, axis, NumberFormat.UInt8BE, true)
-        let data = pins.i2cReadBuffer(12, 2, false)
-        pins.i2cWriteNumber(12, 9, NumberFormat.UInt8BE, true)
-        pins.i2cReadNumber(12, NumberFormat.UInt8BE, false)
-        return (data.getNumber(NumberFormat.Int16LE, 0))
-    }
-    /**
-     * To calibrate the magnetometer every axis needs to be
-     * pointed in every possible orientation. While it is running
-     * rotate the IMU around as much as possible. More data will
-     * yield better results, the duration of the data calibration
-     * process can be set (in seconds).
-     */
-    //% block
-    //% duration.min=1 duration.max=120 duration.defl=10
-    export function CalibrateMagnetometer(duration: number): void {
-        let xmax = IMU9250.MagnetometerRaw(3)
-        let xmin = IMU9250.MagnetometerRaw(3)
-        let ymax = IMU9250.MagnetometerRaw(5)
-        let ymin = IMU9250.MagnetometerRaw(5)
-        let zmax = IMU9250.MagnetometerRaw(7)
-        let zmin = IMU9250.MagnetometerRaw(7)
-        let x = 0
-        let y = 0
-        let z = 0
-        let start = input.runningTime()
-        while (input.runningTime() - start <= duration * 1000) {
-            x = IMU9250.MagnetometerRaw(3)
-            y = IMU9250.MagnetometerRaw(5)
-            z = IMU9250.MagnetometerRaw(7)
-            xmax = Math.max(xmax, x)
-            xmin = Math.min(xmin, x)
-            ymax = Math.max(ymax, y)
-            ymin = Math.min(ymin, y)
-            zmax = Math.max(zmax, z)
-            zmin = Math.min(zmin, z)
-        }
-        xmo = (xmax + xmin) / 2
-        ymo = (ymax + ymin) / 2
-        zmo = (zmax + zmin) / 2
-        let avg = ((xmax - xmin) + (ymax - ymin) + (zmax - zmin)) / 3
-        xms = avg / (xmax - xmin)
-        yms = avg / (ymax - ymin)
-        zms = avg / (zmax - zmin)
-    }
-    /**
-     * Reads the magnetometer.
-     */
-    //% block
-    export function magnetometer(axis: MagAxis): number {
-        let reading = IMU9250.MagnetometerRaw(axis)
-        if (axis == 3) {
-            return (Math.round((reading - xmo) * xms))
-        }
-        if (axis == 5) {
-            return (Math.round((reading - ymo) * yms))
-        }
-        if (axis == 7) {
-            return (Math.round((reading - zmo) * zms))
-        }
-        else { return (0) }
-    }
+
+
+
+
+
 }
